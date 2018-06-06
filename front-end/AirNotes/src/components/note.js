@@ -9,21 +9,19 @@ class Note extends Component {
   render() {
     console.log(this.props);
     return(
-        <ARKit.Plane
-      position={this.props.position}
-      shape={{ width: 1, height: 1 }}
-      material={{
-        color: this.props.color,
-        lightingModel: ARKit.LightingModel.Constant,
-        colorBufferWriteMask: ARKit.ColorMask.None
-      }}
-        >
+      <ARKit.Plane
+        position={this.props.position}
+        shape={{ width: .1, height: .1 }}
+        material={{
+          color: this.props.color,
+        }}
+      >
         <ARKit.Text
-      text={this.props.text}
-      position={{ x: 0.0, y: 0.0, z: 0 }}
-      font={{ size: 0.09, depth: 0.01 }}
+          text={this.props.text}
+          position={{ x: 0.0, y: 0.0, z: 0 }}
+          font={{ size: 0.01, depth: 0.01 }}
         />
-        </ARKit.Plane>
+      </ARKit.Plane>
     );
   }
 }

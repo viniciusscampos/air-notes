@@ -11,17 +11,25 @@ import R from 'ramda';
 class HomeMenu extends Component {
   constructor(props) {
     super(props);
-    const firstNote = {
-      text: 'texto teste',
-      position: {x: 0, y: 0, z: 0},
-      color: "#ffff00"
-    };
     this.state = {
-      notes: [firstNote]
+      notes: []
     }
+    this.addNote = this.addNote.bind(this);
   }
 
   componentWillMount() {
+  }
+
+  async addNote(position) {
+    const numberText = this.state.notes.length;
+    const note = {
+      color: '#f1d161',
+      text: `texto teste ${numberText}`,
+      position: position
+    }
+    this.setState((previousState) => ({
+      notes: R.concat(previousState.notes, [note])
+    }));
   }
 
   render() {
@@ -47,7 +55,10 @@ class HomeMenu extends Component {
           color="green"
           size={60}
           containerStyle={styles.button}
-          onPress={() => alert('add post')}
+          onPress={async () => {
+              const cameraStats= await ARKit.getCamera();
+              this.addNote(cameraStats.position);
+          }}
         />
       </View>
     );
