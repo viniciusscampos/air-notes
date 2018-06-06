@@ -1,0 +1,9 @@
+service: air-notes-anchor-crud
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+
+functions:
+  create:
+    handler: handler.hello
