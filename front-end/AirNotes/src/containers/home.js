@@ -8,6 +8,8 @@ import { Icon } from 'react-native-elements';
 import Note from '../components/note';
 import R from 'ramda';
 
+import { post } from '../api/api';
+
 class HomeMenu extends Component {
   constructor(props) {
     super(props);
@@ -24,9 +26,12 @@ class HomeMenu extends Component {
     const numberText = this.state.notes.length;
     const note = {
       color: '#f1d161',
-      text: `texto teste ${numberText}`,
+      note: `texto teste ${numberText}`,
       position: position
     }
+    await post('/note', note)
+    .then(doc => console.log(doc))
+    .catch(err => console.log(err))
     this.setState((previousState) => ({
       notes: R.concat(previousState.notes, [note])
     }));

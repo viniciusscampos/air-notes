@@ -5,19 +5,29 @@ import { ARKit } from 'react-native-arkit';
 class Note extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      defaultProps: {
+        color: '',
+        position : {},
+        note: ''
+      }
+    }
   }
   render() {
-    console.log(this.props);
+    const propsToUse = {
+      ...this.state.defaultProps,
+      ...this.props
+    };
     return(
       <ARKit.Plane
-        position={this.props.position}
+        position={propsToUse.position}
         shape={{ width: .1, height: .1 }}
         material={{
-          color: this.props.color,
+          color: propsToUse.color,
         }}
       >
         <ARKit.Text
-          text={this.props.text}
+          text={propsToUse.note}
           position={{ x: 0.0, y: 0.0, z: 0 }}
           font={{ size: 0.01, depth: 0.01 }}
         />
