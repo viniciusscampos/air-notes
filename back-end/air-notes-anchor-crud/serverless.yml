@@ -7,3 +7,5 @@ provider:
 functions:
   create:
     handler: handler.hello
+    memorySize: 128
+    reservedConcurrency: 2
