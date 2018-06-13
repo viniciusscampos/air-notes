@@ -9,7 +9,7 @@ class Note extends Component {
       defaultProps: {
         color: '',
         position : {},
-        note: ''
+        title: ''
       }
     }
   }
@@ -18,7 +18,7 @@ class Note extends Component {
       ...this.state.defaultProps,
       ...this.props
     };
-    return(
+    return (
       <ARKit.Plane
         position={propsToUse.position}
         shape={{ width: .1, height: .1 }}
@@ -27,7 +27,7 @@ class Note extends Component {
         }}
       >
         <ARKit.Text
-          text={propsToUse.note}
+          text={propsToUse.title}
           position={{ x: 0.0, y: 0.0, z: 0 }}
           font={{ size: 0.01, depth: 0.01 }}
         />
