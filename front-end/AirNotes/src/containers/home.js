@@ -5,10 +5,36 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { ARKit } from 'react-native-arkit';
 import { Icon } from 'react-native-elements';
+import Note from '../components/note';
+import R from 'ramda';
+
+import { post } from '../api/api';
 
 class HomeMenu extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      notes: []
+    }
+    this.addNote = this.addNote.bind(this);
+  }
+
+  componentWillMount() {
+  }
+
+  async addNote(position) {
+    const numberText = this.state.notes.length;
+    const note = {
+      color: '#f1d161',
+      note: `texto teste ${numberText}`,
+      position: position
+    }
+    await post('/note', note)
+    .then(doc => console.log(doc))
+    .catch(err => console.log(err))
+    this.setState((previousState) => ({
+      notes: R.concat(previousState.notes, [note])
+    }));
   }
 
   render() {
@@ -20,18 +46,24 @@ class HomeMenu extends Component {
           planeDetection={ ARKit.ARPlaneDetection.Horizontal }
           lightEstimationEnabled
         >
-          <ARKit.Text
-            text="ARKit is Cool!"
-            position={{ x: 0.2, y: 0.6, z: 0 }}
-            font={{ size: 0.15, depth: 0.05 }}
-          />
+          {R.map((note) =>
+            ( <Note
+                key={Math.random()}
+                text={note.text}
+                position={note.position}
+                color={note.color}
+            /> )
+             , this.state.notes)}
         </ARKit>
         <Icon
           name="add-circle"
           color="green"
-          size={35}
+          size={60}
           containerStyle={styles.button}
-          onPress={() => alert('add post')}
+          onPress={async () => {
+              const cameraStats= await ARKit.getCamera();
+              this.addNote(cameraStats.position);
+          }}
         />
       </View>
     );
@@ -44,8 +76,8 @@ const styles = StyleSheet.create({
     zIndex: 5,
     right: 0,
     bottom: 0,
-    paddingRight: 20,
-    paddingBottom: 20
+    paddingRight: 25,
+    paddingBottom: 25
   }
 });
 

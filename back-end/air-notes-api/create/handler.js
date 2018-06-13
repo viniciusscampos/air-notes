@@ -1,4 +1,4 @@
-const AWS = require("aws-sdk")
+const AWS = require("aws-sdk");
 
 module.exports.create = async (event, context, callback) => {
 
