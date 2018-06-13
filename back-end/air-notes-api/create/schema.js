@@ -32,7 +32,7 @@ module.exports =
                             "type": "string"
                         }
                     },
-                    "required": ["title", "body", "author", "position", "rotation"]
+                    "required": ["title", "body", "author"]
                 }
             }
         }
