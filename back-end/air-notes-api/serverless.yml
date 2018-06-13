@@ -4,7 +4,7 @@ provider:
   name: aws
   runtime: nodejs8.10
   environment:
-    DYNAMODB_TABLE: notes-${opt:stage, self:provider.stage}
+    DYNAMODB_TABLE: anchor-${opt:stage, self:provider.stage}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -22,7 +22,7 @@ functions:
     memorySize: 128
     reservedConcurrency: 2
     events:
-      - http: POST note
+      - http: POST anchor
 
 resources:
   Resources:
@@ -31,10 +31,10 @@ resources:
       Properties:
         TableName: ${self:provider.environment.DYNAMODB_TABLE}
         AttributeDefinitions:
-          - AttributeName: note
-            AttributeType: S            
+          - AttributeName: anchor
+            AttributeType: S
         KeySchema:
-          - AttributeName: note
+          - AttributeName: anchor
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1

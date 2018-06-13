@@ -1,35 +1,28 @@
 const AWS = require("aws-sdk")
 
-module.exports.create = (event, context, callback) => {
+module.exports.create = async (event, context, callback) => {
 
-  const dynamoDb = new AWS.DynamoDB.DocumentClient()    
-  const request = event
-  const body = JSON.parse(request.body) 
+  const dynamoDb = new AWS.DynamoDB.DocumentClient();
+  const request = event;
+  const body = JSON.parse(request.body);
 
   var params = {
     TableName: process.env.DYNAMODB_TABLE,  
-    Item: {
-        note: body.note
-    }
+    Item: body
   }
 
-  dynamoDb.put(params, (error) => {
-    if(error) {
-      console.log(error)
+  const response = await dynamoDb.put(params).promise()
+  .then((data)=> {
+    const response = {
+      statusCode: 200,
+      body: JSON.stringify(body),
+    };
 
-      callback(null, {
-        statusCode: 501,
-        headers: { 'Content-Type': 'text/plain' },
-        body: 'Couldn\'t create the note item.',
-      })
-    }
+    return response
+  }, (error) => {
+    console.log(error);
   })
 
-  const response = {
-    statusCode: 200,
-    body: JSON.stringify(params.Item),
-  };
+  return response;
 
-  callback(null, response)
-    
 }
