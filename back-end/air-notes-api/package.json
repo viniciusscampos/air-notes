@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "ajv": "^6.5.1",
     "aws-sdk": "^2.252.1"
   },
   "devDependencies": {
