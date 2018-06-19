@@ -26,10 +26,16 @@ module.exports =
                             "type": "string"
                         },
                         "position": {
-                            "type": "string"
+                            "type": "array",
+                            "items": {
+                                "type": "number"
+                            }
                         },
                         "rotation": {
-                            "type": "string"
+                            "type": "array",
+                            "items": {
+                                "type": "number"
+                            }
                         }
                     },
                     "required": ["title", "body", "author"]
