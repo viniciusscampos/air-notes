@@ -1,6 +1,6 @@
 const AWS = require("aws-sdk");
 
-module.exports.create = async (event, context, callback) => {
+module.exports.getAnchor = async (event, context, callback) => {
 
   const dynamoDb = new AWS.DynamoDB.DocumentClient();
   const request = event;
@@ -8,24 +8,25 @@ module.exports.create = async (event, context, callback) => {
 
   // check if anchor is already in use
   var params = {
+    TableName: process.env.DYNAMODB_TABLE,
     Key: {
       "anchor": body.anchor
     }
   } 
   
-  let data = await docClient.get(params).promise()
+  let data = await dynamoDb.get(params).promise()
 
-  if (data && data.Item && data.Item.payload) {
+  if (data && data.Item) {
     const response = {
       statusCode: 200,
-      body: JSON.stringify(data),
+      body: JSON.stringify(data.Item),
     };
     return response;
   }
 
   const response = {
     statusCode: 404,
-    message: "No anchor was found with that id",
+    body: JSON.stringify({message: "No anchor was found with that id"})
   };
   return response;
 
