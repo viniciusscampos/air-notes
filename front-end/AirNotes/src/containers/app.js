@@ -18,10 +18,12 @@ const store = createStore(reducers, composeEnhancers(
 ));
 
 import HomeMenu from './home';
+import AnchorScanner from './anchorScanner';
 
 const scenes = Actions.create(
     <Scene key="root">
       <Scene key="home" component={HomeMenu} initial={true} hideNavBar={true} panHandlers={null}/>
+      <Scene key="anchorScanner" component={AnchorScanner} hideNavBar={true}></Scene>
     </Scene>
 );
 
