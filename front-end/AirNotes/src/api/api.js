@@ -2,8 +2,6 @@ import R from 'ramda';
 
 const server_url = 'https://sj29y9t4xg.execute-api.us-east-1.amazonaws.com/dev/';
 
-console.log(server_url);
-
 
 export async function get(route, headers = {}) {
   return await fetchData( server_url + route,'GET', headers);
