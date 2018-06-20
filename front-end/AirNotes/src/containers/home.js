@@ -86,6 +86,13 @@ class HomeMenu extends Component {
               });
           }}
         />
+        <Icon
+          name="add-circle"
+          color="grey"
+          size={50}
+          containerStyle={styles.buttonLeft}
+          onPress={async () => Actions.anchorScanner()}
+        />
         <View>
           <Modal isVisible={this.state.modalVisible}>
             <View style={styles.modalView}>
@@ -122,7 +129,7 @@ const styles = StyleSheet.create({
     paddingRight: 25,
     paddingBottom: 25
   },
-  buttonSearch: {
+  buttonLeft: {
     position: 'absolute',
     zIndex: 5,
     left: 0,
