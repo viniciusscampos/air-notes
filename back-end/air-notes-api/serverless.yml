@@ -2,7 +2,6 @@ service: air-notes-crud
 
 provider:
   name: aws
-  runtime: nodejs8.10
   environment:
     DYNAMODB_TABLE: anchor-${opt:stage, self:provider.stage}
   iamRoleStatements:
@@ -18,17 +17,26 @@ provider:
 
 functions:
   create:
+    runtime: nodejs8.10
     handler: create/handler.create    
     memorySize: 128
     reservedConcurrency: 2
     events:
       - http: POST anchor/create
   get-anchor:
+    runtime: nodejs8.10
     handler: getAnchor/handler.getAnchor    
     memorySize: 128
     reservedConcurrency: 2
     events:
       - http: POST anchor/get
+  update-anchor:
+    runtime: python3.6
+    handler: updateAnchor/handler.updateAnchor    
+    memorySize: 128
+    reservedConcurrency: 2
+    events:
+      - http: POST anchor/update
 
 resources:
   Resources:
@@ -45,3 +53,10 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+     dockerizePip: false
