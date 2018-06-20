@@ -8,11 +8,30 @@ module.exports.create = async (event, context, callback) => {
   const request = event;
   const body = JSON.parse(request.body);
 
+  // validate client data
   const errors = await validator(schema, body);
   if(errors){      
     const response = {
       statusCode: 500,
       body: JSON.stringify(errors),
+    };
+    return response;
+  }
+
+  // check if anchor is already in use
+  var check = {
+    Key: {
+      "anchor": body.anchor
+    }
+  } 
+
+  var records = await docClient.get(check).promise()
+  
+  if (records && records.Item && records.Item.payload) {
+    const response = {
+      statusCode: 403,
+      message: "Anchor is already in use.",
+      body: JSON.stringify(body),
     };
     return response;
   }
