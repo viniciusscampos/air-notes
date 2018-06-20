@@ -20,19 +20,20 @@ module.exports.create = async (event, context, callback) => {
 
   // check if anchor is already in use
   var check = {
+    TableName: process.env.DYNAMODB_TABLE, 
     Key: {
       "anchor": body.anchor
     }
   } 
 
-  var records = await docClient.get(check).promise()
+  var record = await dynamoDb.get(check).promise()
   
-  if (records && records.Item && records.Item.payload) {
+  if (record && record.Item) {
     const response = {
-      statusCode: 403,
-      message: "Anchor is already in use.",
-      body: JSON.stringify(body),
+      statusCode: 409,
+      body: JSON.stringify({message: "Anchor is already in use."})
     };
+    console.log(response)
     return response;
   }
 
@@ -54,5 +55,4 @@ module.exports.create = async (event, context, callback) => {
   })
 
   return response;
-
 }

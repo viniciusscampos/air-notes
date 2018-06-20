@@ -22,7 +22,13 @@ functions:
     memorySize: 128
     reservedConcurrency: 2
     events:
-      - http: POST anchor
+      - http: POST anchor/create
+  get-anchor:
+    handler: getAnchor/handler.getAnchor    
+    memorySize: 128
+    reservedConcurrency: 2
+    events:
+      - http: POST anchor/get
 
 resources:
   Resources:
