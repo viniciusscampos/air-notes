@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import { AppRegistry, Text, View, StyleSheet } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import Modal from 'react-native-modal';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { ARKit } from 'react-native-arkit';
 import { Icon, FormLabel, FormInput, FormValidationMessage, Button } from 'react-native-elements';
+import Modal from 'react-native-modal';
 import Note from '../components/note';
 import R from 'ramda';
 
 import { post } from '../api/api';
+import * as noteActions from '../actions/noteActions';
 
 class HomeMenu extends Component {
   constructor(props) {
@@ -39,23 +40,19 @@ class HomeMenu extends Component {
       hasError = true;
     }
     if (hasError) return;
-    const numberText = this.state.notes.length;
     const note = {
       color: '#f1d161',
       title: title,
       body: body,
       position: cameraPosition
     }
-    await post('/note', note)
-    .then(doc => console.log(doc))
-    .catch(err => console.log(err))
-    this.setState((previousState) => ({
-      notes: R.concat(previousState.notes, [note]),
+    this.props.actions.publishNote(note);
+    this.setState({
+      modalVisible: false,
       title: null,
       body: null,
-      cameraPosition: null,
-      modalVisible: false
-    }));
+      cameraPosition: null
+    })
   }
 
   render() {
@@ -74,7 +71,7 @@ class HomeMenu extends Component {
                 position={note.position}
                 color={note.color}
             /> )
-             , this.state.notes)}
+             , this.props.note.notes || [])}
         </ARKit>
         <Icon
           name="add-circle"
@@ -147,7 +144,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect(({routes, user, chat}) => ({routes, user, chat}),
+export default connect(({routes, note}) => ({routes, note}),
   (dispatch) => ({
-    actions: bindActionCreators({}, dispatch)
+    actions: bindActionCreators({...noteActions}, dispatch)
   }))(HomeMenu);

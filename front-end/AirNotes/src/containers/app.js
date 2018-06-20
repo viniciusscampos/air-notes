@@ -3,15 +3,17 @@ import { Router, Scene, Actions } from 'react-native-router-flux';
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import { connect, Provider } from 'react-redux';
 import { AppRegistry, Navigator } from 'react-native';
+import thunk from 'redux-thunk';
+import promiseMiddleware from 'redux-promise';
 import { devToolsEnhancer, composeWithDevTools} from 'remote-redux-devtools';
 
 import reducers from '../reducers';
 
 const RouterWithRedux = connect()(Router);
 
-const middleware = [];
+const middleware = [thunk, promiseMiddleware];
 const composeEnhancers = composeWithDevTools({realtime: true});
-const store = createStore(composeEnhancers(
+const store = createStore(reducers, composeEnhancers(
   applyMiddleware(...middleware),
 ));
 
