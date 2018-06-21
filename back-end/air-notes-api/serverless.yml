@@ -18,11 +18,11 @@ provider:
 functions:
   create:
     runtime: nodejs8.10
-    handler: create/handler.create    
+    handler: create/handler.createAnchor    
     memorySize: 128
     reservedConcurrency: 2
     events:
-      - http: POST anchor/create
+      - http: POST anchor/createAnchor
   get-anchor:
     runtime: nodejs8.10
     handler: getAnchor/handler.getAnchor    
