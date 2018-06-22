@@ -16,16 +16,16 @@ provider:
       Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
 
 functions:
-  create:
+  create-anchor:
     runtime: nodejs8.10
-    handler: create/handler.createAnchor    
+    handler: createAnchor/handler.createAnchor    
     memorySize: 128
     reservedConcurrency: 2
     events:
-      - http: POST anchor/createAnchor
+      - http: POST anchor/create
   get-anchor:
     runtime: nodejs8.10
-    handler: getAnchor/handler.getAnchor    
+    handler: getAnchor/handler.getAnchor  
     memorySize: 128
     reservedConcurrency: 2
     events:
