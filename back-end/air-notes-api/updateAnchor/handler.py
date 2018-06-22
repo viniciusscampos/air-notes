@@ -13,7 +13,7 @@ def updateAnchor (event, context):
 
         dynamodb.update_item(TableName=table, 
                                 Key={'anchor': body["anchor"]}, 
-                                AttributeUpdates={"notes":body["notes"]}}) 
+                                AttributeUpdates={"notes":body["notes"]}) 
         return {
             statusCode: 200,
             body: json.dumps(body), ensure_ascii=False),

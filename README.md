@@ -2,9 +2,9 @@
 
 ## back-end
 
-[architecture](https://i.imgur.com/7qro8w0.png)
+![architecture](https://i.imgur.com/7qro8w0.png)
 
-The entire backend is created using the serverless framework over AWS. We use the API Gateway + AWS Lambda to create, get and update anchors saved at DynamDB.
+The entire backend is created using the serverless framework over AWS. We use the API Gateway + AWS Lambda to create, get and update anchors saved at DynamoDB.
 
 ### Setup
 
@@ -21,5 +21,5 @@ Use `yarn install` to install node dependencies This is step is also required by
     * Returns the anchor stored at the databased with the provided *anchor* attribute set at the request body.
 
 * ```POST anchor/update```
-    * *createAnchor/handler.js*
+    * *updateAnchor/handler.js*
     * Updates the *notes* attribute set at the request body of the anchor with the provided *anchor* attribute set at the request body.
