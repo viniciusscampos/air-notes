@@ -2,7 +2,7 @@ const AWS = require("aws-sdk");
 const validator = require('./validate')
 const schema = require('./schema')
 
-module.exports.create = async (event, context, callback) => {
+module.exports.createAnchor = async (event, context, callback) => {
 
   const dynamoDb = new AWS.DynamoDB.DocumentClient();
   const request = event;
