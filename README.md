@@ -14,7 +14,7 @@ Use `yarn install` to install node dependencies This is step is also required by
 
 * ```POST anchor/create```
     * *createAnchor/handler.js*
-    * Adds a new anchor to the database with [this](createAnchor/schema.js) schema.
+    * Adds a new anchor to the database with [this](https://github.com/viniciusscampos/air-notes/blob/back-end-dev/back-end/air-notes-api/createAnchor/schema.js) schema.
 
 * ```POST anchor/get```
     * *getAnchor/handler.js*
