@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { Router, Scene, Actions } from 'react-native-router-flux';
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import { connect, Provider } from 'react-redux';
-import { AppRegistry, Navigator } from 'react-native';
+import { AppRegistry, Navigator, AsyncStorage } from 'react-native';
 import thunk from 'redux-thunk';
 import promiseMiddleware from 'redux-promise';
 import { devToolsEnhancer, composeWithDevTools} from 'remote-redux-devtools';
+import uuid from 'uuid';
 
 import reducers from '../reducers';
 
@@ -28,6 +29,24 @@ const scenes = Actions.create(
 );
 
 export default class App extends Component {
+  async componentWillMount() {
+    try {
+      const ownerId = await AsyncStorage.getItem('user_id');
+      if (!ownerId)  {
+        const newOwnerId  =  uuid.v4();
+        await AsyncStorage.setItem('user_id', newOwnerId)
+          .then((doc) => console.log(doc))
+          .catch((err) => alert(err.toString()));
+
+      }
+    } catch (err) {
+      const ownerId  =  uuid.v4();
+      await AsyncStorate.setItem('user_id', ownerId)
+        .then((doc) => console.log(doc))
+        .catch((err) => alert(err.toString()));
+    }
+  }
+
   render() {
     return (
         <Provider store={store}>
