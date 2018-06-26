@@ -1,6 +1,6 @@
 const AWS = require("aws-sdk");
-const validator = require('./validate')
-const schema = require('./schema')
+const validator = require('./validate');
+const schema = require('./schema');
 
 module.exports.createAnchor = async (event, context, callback) => {
 
@@ -10,49 +10,49 @@ module.exports.createAnchor = async (event, context, callback) => {
 
   // validate client data
   const errors = await validator(schema, body);
-  if(errors){      
+  if(errors){
     const response = {
       statusCode: 500,
-      body: JSON.stringify(errors),
+      body: JSON.stringify(errors)
     };
     return response;
-  }
+}
 
   // check if anchor is already in use
   var check = {
-    TableName: process.env.DYNAMODB_TABLE, 
+    TableName: process.env.DYNAMODB_TABLE,
     Key: {
       "anchor": body.anchor
     }
-  } 
+  };
 
-  var record = await dynamoDb.get(check).promise()
-  
+  var record = await dynamoDb.get(check).promise();
+
   if (record && record.Item) {
     const response = {
       statusCode: 409,
       body: JSON.stringify({message: "Anchor is already in use."})
     };
-    console.log(response)
+    console.log(response);
     return response;
   }
 
   var params = {
-    TableName: process.env.DYNAMODB_TABLE,  
+    TableName: process.env.DYNAMODB_TABLE,
     Item: body
-  }
+  };
 
   const response = await dynamoDb.put(params).promise()
   .then((data)=> {
     const response = {
       statusCode: 200,
-      body: JSON.stringify(body),
+      body: JSON.stringify(body)
     };
 
-    return response
+    return response;
   }, (error) => {
     console.log(error);
-  })
+  });
 
   return response;
-}
+};

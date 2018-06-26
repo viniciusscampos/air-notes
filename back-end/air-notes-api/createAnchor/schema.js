@@ -1,4 +1,4 @@
-module.exports = 
+module.exports =
 {
     "properties": {
         "anchor": {
@@ -44,4 +44,4 @@ module.exports =
         }
     },
     "required": ["anchor", "owner", "status", "notes"]
-}
+};
