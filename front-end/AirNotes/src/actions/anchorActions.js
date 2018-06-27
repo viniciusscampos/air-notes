@@ -32,10 +32,12 @@ export function addAnchor(data) {
       status: 'acorip',
       notes: []
     };
+    console.log("sending post to /anchor/create with: ", postData);
     post('/anchor/create', postData)
       .then(doc => doc.json())
       .then(doc => {
-        getAnchor(data.anchor);
+        console.log("create anchor request response: ", doc);
+        dispatch(getAnchor(data.anchor));
       })
       .catch(err => {
         console.log(err);
@@ -46,13 +48,22 @@ export function addAnchor(data) {
 
 export function getAnchor(id) {
   return (dispatch, getState) => {
+    const postData = {
+      anchor: id
+    };
+    console.log("requesting anchor");
     dispatch(requestAnchor());
-    get('/anchor/get/', {anchor: id})
+    console.log("sending get to /anchor/get with: ", postData);
+    post('/anchor/get/', postData)
+      .then(doc => doc.json())
       .then(doc => {
         console.log(doc);
         dispatch(receiveAnchor(R.omit('notes', doc)));
         dispatch(receiveNotes(doc.notes));
       })
-      .catch(err => dispatch(invalidateAnchor(err)));
+      .catch(err => {
+        console.log(err);
+        dispatch(invalidateAnchor(err))
+      });
   };
 }

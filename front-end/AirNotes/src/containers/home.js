@@ -63,6 +63,7 @@ class HomeMenu extends Component {
   }
 
   render() {
+    console.log("Redux state: ", this.props);
     return (
       <View style={{ flex: 1 }}>
         <ARKit
@@ -163,7 +164,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect(({routes, note}) => ({routes, note}),
+export default connect(({routes, note, anchor}) => ({routes, note, anchor}),
   (dispatch) => ({
     actions: bindActionCreators({...noteActions, ...anchorActions}, dispatch)
   }))(HomeMenu);

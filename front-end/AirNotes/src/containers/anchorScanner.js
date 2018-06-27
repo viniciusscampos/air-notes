@@ -42,13 +42,18 @@ class AnchorScanner extends Component {
     .then(doc => doc)
     .catch(err => err);
     const cameraStats = await ARKit.getCamera();
+    console.log("camera stats: ", cameraStats);
     if (ownerId instanceof Error) {
       Alert('deu ruim');
     } else {
-      this.props.addAnchor({anchor: e.data, owner: ownerId});
+      this.props.actions.addAnchor({
+        anchor: e.data,
+        owner: ownerId
+      });
     }
 
-      this.scanner.reactivate();
+    // this.scanner.reactivate();
+    Actions.pop();
   }
 
   _renderTopContent() {

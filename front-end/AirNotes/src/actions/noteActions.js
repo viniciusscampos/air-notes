@@ -33,12 +33,13 @@ export function publishNote(data) {
   return(dispatch, getState) => {
     const { anchor, note } = getState();
     const postData = {
-      ...anchor,
+      ...anchor.anchor,
       notes: R.concat(note.notes, [data])
     };
     console.log(postData);
     post('/anchor/update', postData)
-      .then(doc =>{
+      .then(doc => doc.json())
+      .then(doc => {
         console.log(doc);
         dispatch(addNote(data));
       })
@@ -52,9 +53,7 @@ export function publishNote(data) {
 export function fetchNotes(query) {
   return (dispatch, getState) => {
     get('/note')
-      .then(res => {
-        return res.json();
-      })
+      .then(res => res.json())
       .then(json => {
         dispatch(receiveNotes(json));
       })
