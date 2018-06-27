@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AppRegistry, Text, View, StyleSheet } from 'react-native';
+import { AppRegistry, Text, View, StyleSheet, TouchableWithoutFeedback, Dimensions, AsyncStorage } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -7,10 +7,12 @@ import { ARKit } from 'react-native-arkit';
 import { Icon, FormLabel, FormInput, FormValidationMessage, Button } from 'react-native-elements';
 import Modal from 'react-native-modal';
 import Note from '../components/note';
+import AnchorScanner from './anchorScanner';
 import R from 'ramda';
 
 import { post } from '../api/api';
 import * as noteActions from '../actions/noteActions';
+import * as anchorActions from '../actions/anchorActions';
 
 class HomeMenu extends Component {
   constructor(props) {
@@ -20,7 +22,9 @@ class HomeMenu extends Component {
       title: null,
       body: null,
       modalVisible: false,
-      cameraPosition: null
+      cameraPosition: null,
+      cameraRotation: null,
+      hide: false
     }
     this.addNote = this.addNote.bind(this);
   }
@@ -29,7 +33,7 @@ class HomeMenu extends Component {
   }
 
   async addNote(position) {
-    const { title, body, cameraPosition } = this.state;
+    const { title, body, cameraPosition, cameraRotation } = this.state;
     let hasError = false;
     if (!title) {
       this.InputTitle.shake();
@@ -40,18 +44,21 @@ class HomeMenu extends Component {
       hasError = true;
     }
     if (hasError) return;
+    const userId = await AsyncStorage.getItem('user_id');
     const note = {
-      color: '#f1d161',
       title: title,
       body: body,
-      position: cameraPosition
+      author: userId,
+      position: cameraPosition,
+      rotation: cameraRotation
     }
     this.props.actions.publishNote(note);
     this.setState({
       modalVisible: false,
       title: null,
       body: null,
-      cameraPosition: null
+      cameraPosition: null,
+      cameraRotation: null
     })
   }
 
@@ -60,9 +67,10 @@ class HomeMenu extends Component {
       <View style={{ flex: 1 }}>
         <ARKit
           style={{ flex: 1 }}
-          debug
           planeDetection={ ARKit.ARPlaneDetection.Horizontal }
           lightEstimationEnabled
+          debug
+          onARKitError={(err) => console.log(err)}
         >
           {R.map((note) =>
             ( <Note
@@ -82,16 +90,20 @@ class HomeMenu extends Component {
               const cameraStats = await ARKit.getCamera();
               this.setState({
                 cameraPosition: cameraStats.position,
+                cameraRotation: cameraStats.rotation,
                 modalVisible: true
               });
           }}
         />
         <Icon
-          name="add-circle"
+          name="anchor"
+          type="font-awesome"
           color="grey"
-          size={50}
+          size={40}
           containerStyle={styles.buttonLeft}
-          onPress={async () => Actions.anchorScanner()}
+          onPress={async () => {
+              Actions.anchorScanner();
+          }}
         />
         <View>
           <Modal isVisible={this.state.modalVisible}>
@@ -153,5 +165,5 @@ const styles = StyleSheet.create({
 
 export default connect(({routes, note}) => ({routes, note}),
   (dispatch) => ({
-    actions: bindActionCreators({...noteActions}, dispatch)
+    actions: bindActionCreators({...noteActions, ...anchorActions}, dispatch)
   }))(HomeMenu);

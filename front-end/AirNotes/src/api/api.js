@@ -1,6 +1,6 @@
 import R from 'ramda';
 
-const server_url = 'https://sj29y9t4xg.execute-api.us-east-1.amazonaws.com/dev/';
+const server_url = 'https://l7hir2g07a.execute-api.us-east-1.amazonaws.com/dev/';
 
 
 export async function get(route, headers = {}) {

@@ -6,3 +6,9 @@ export const RECEIVE_NOTES = 'RECEIVE_NOTES';
 export const INVALIDATE_NOTES = 'INVALIDATE_NOTES';
 
 export const ADD_NOTE =  'ADD_NOTE';
+
+export const REQUEST_ANCHOR = 'REQUEST_ANCHOR';
+
+export const RECEIVE_ANCHOR = 'RECEIVE_ANCHOR';
+
+export const INVALIDATE_ANCHOR = 'INVALIDATE_ANCHOR';

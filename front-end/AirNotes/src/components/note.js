@@ -23,7 +23,7 @@ class Note extends Component {
         position={propsToUse.position}
         shape={{ width: .1, height: .1 }}
         material={{
-          color: propsToUse.color,
+          color: '#f1d161'
         }}
       >
         <ARKit.Text

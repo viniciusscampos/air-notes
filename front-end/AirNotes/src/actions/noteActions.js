@@ -1,5 +1,6 @@
 import * as types from './actionsTypes';
 import { get, post, put } from '../api/api';
+import R from 'ramda';
 
 function requestNotes() {
   return {
@@ -7,7 +8,7 @@ function requestNotes() {
   };
 }
 
-function receiveNotes(data) {
+export function receiveNotes(data) {
   return {
     type: types.RECEIVE_NOTES,
     data
@@ -30,10 +31,21 @@ function addNote(note) {
 
 export function publishNote(data) {
   return(dispatch, getState) => {
-    dispatch(addNote(data));
-    // post('/note', data)
-    //   .then(doc => dispatch(addNote(data)))
-    //   .catch(err => dispatch(invalidateNotes(err)));
+    const { anchor, note } = getState();
+    const postData = {
+      ...anchor,
+      notes: R.concat(note.notes, [data])
+    };
+    console.log(postData);
+    post('/anchor/update', postData)
+      .then(doc =>{
+        console.log(doc);
+        dispatch(addNote(data));
+      })
+      .catch(err => {
+        console.log(err);
+        dispatch(invalidateNotes(err));
+      });
   };
 }
 

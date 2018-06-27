@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { AppRegistry, Text, View, StyleSheet, TouchableOpacity, Dimensions, PermissionsAndroid } from 'react-native';
+import { AppRegistry, Text, View, StyleSheet, TouchableOpacity, Dimensions, PermissionsAndroid, Alert, AsyncStorage } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { ARKit } from 'react-native-arkit';
 import R from 'ramda';
 
 import { Icon, FormLabel, FormInput, FormValidationMessage, Button } from 'react-native-elements';
 import QRCodeScanner from 'react-native-qrcode-scanner';
+import * as anchorActions from '../actions/anchorActions';
 
 async function requestCameraPermission() {
   try {
@@ -29,10 +31,24 @@ async function requestCameraPermission() {
 class AnchorScanner extends Component {
   constructor(props) {
     super(props);
+    this.qrCodeReceived = this.qrCodeReceived.bind(this);
+  }
+
+  async componentWillMount() {
   }
 
   async qrCodeReceived(e) {
-    alert(e.data);
+    const ownerId = await AsyncStorage.getItem('user_id')
+    .then(doc => doc)
+    .catch(err => err);
+    const cameraStats = await ARKit.getCamera();
+    if (ownerId instanceof Error) {
+      Alert('deu ruim');
+    } else {
+      this.props.addAnchor({anchor: e.data, owner: ownerId});
+    }
+
+      this.scanner.reactivate();
   }
 
   _renderTopContent() {
@@ -48,11 +64,10 @@ class AnchorScanner extends Component {
   }
 
   render() {
-    requestCameraPermission();
     return (
       <QRCodeScanner
         ref={(node) => this.scanner = node}
-        onRead={this.qrCodeReceived.bind(this)}
+        onRead={(e) => this.qrCodeReceived(e)}
         topContent={
           <Text style={styles.centerText}>
             AirNotes
@@ -104,7 +119,8 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect(({routes, note}) => ({routes, note}),
+
+export default connect(({routes, note, anchor}) => ({routes, note, anchor}),
   (dispatch) => ({
-    actions: bindActionCreators({}, dispatch)
+    actions: bindActionCreators({...anchorActions}, dispatch)
   }))(AnchorScanner);
