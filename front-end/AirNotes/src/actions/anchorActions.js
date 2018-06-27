@@ -32,12 +32,10 @@ export function addAnchor(data) {
       status: 'acorip',
       notes: []
     };
-    console.log(postData);
     post('/anchor/create', postData)
       .then(doc => doc.json())
       .then(doc => {
-        console.log(doc);
-        getAnchor(doc);
+        getAnchor(data.anchor);
       })
       .catch(err => {
         console.log(err);
