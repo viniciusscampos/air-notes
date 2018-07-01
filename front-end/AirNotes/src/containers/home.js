@@ -128,11 +128,7 @@ class HomeMenu extends Component {
           size={40}
           containerStyle={styles.buttonLeft}
           onPress={async () => {
-              const cameraStats = await ARKit.getCamera();
-              this.setState({
-                position: cameraStats.position
-              })
-              //Actions.anchorScanner();
+              Actions.anchorScanner();
           }}
         />
         <View>
