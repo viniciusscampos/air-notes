@@ -79,6 +79,7 @@ class HomeMenu extends Component {
                 title={note.title}
                 position={note.position}
                 color={note.color}
+                body={note.body}
             /> )
              , this.props.note.notes || [])}
         </ARKit>
