@@ -49,7 +49,7 @@ class AnchorScanner extends Component {
       this.props.actions.addAnchor({
         anchor: e.data,
         owner: ownerId
-      });
+      }, cameraStats.position);
     }
 
     // this.scanner.reactivate();

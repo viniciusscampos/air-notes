@@ -9,11 +9,12 @@ function requestAnchor() {
   };
 }
 
-function receiveAnchor(data) {
+function receiveAnchor(data, position) {
   alert(data.toString());
   return {
     type: types.RECEIVE_ANCHOR,
-    data
+    data,
+    position
   };
 }
 
@@ -25,7 +26,7 @@ function invalidateAnchor(err) {
   };
 }
 
-export function addAnchor(data) {
+export function addAnchor(data, position) {
   return (dispatch, getState) => {
     const postData = {
       ...data,
@@ -37,7 +38,7 @@ export function addAnchor(data) {
       .then(doc => doc.json())
       .then(doc => {
         console.log("create anchor request response: ", doc);
-        dispatch(getAnchor(data.anchor));
+        dispatch(getAnchor(data.anchor, position));
       })
       .catch(err => {
         console.log(err);
@@ -46,7 +47,7 @@ export function addAnchor(data) {
   };
 }
 
-export function getAnchor(id) {
+export function getAnchor(id, position) {
   return (dispatch, getState) => {
     const postData = {
       anchor: id
@@ -58,12 +59,12 @@ export function getAnchor(id) {
       .then(doc => doc.json())
       .then(doc => {
         console.log(doc);
-        dispatch(receiveAnchor(R.omit('notes', doc)));
+        dispatch(receiveAnchor(R.omit('notes', {data: doc}), position));
         dispatch(receiveNotes(doc.notes));
       })
       .catch(err => {
         console.log(err);
-        dispatch(invalidateAnchor(err))
+        dispatch(invalidateAnchor(err));
       });
   };
 }

@@ -21,6 +21,10 @@ class HomeMenu extends Component {
       notes: [],
       title: null,
       body: null,
+      error: {
+        title: "",
+        body: ""
+      },
       modalVisible: false,
       cameraPosition: null,
       cameraRotation: null,
@@ -35,15 +39,34 @@ class HomeMenu extends Component {
   async addNote(position) {
     const { title, body, cameraPosition, cameraRotation } = this.state;
     let hasError = false;
+    let error = {
+      title: "",
+      body: ""
+    }
     if (!title) {
+      error.title = "This field is required";
+      this.InputTitle.shake();
+      hasError = true;
+    } else if (title.length > 30) {
+      error.title = "Title must have less than 30 characters";
       this.InputTitle.shake();
       hasError = true;
     }
+
     if (!body) {
+      error.body = "This field is required";
+      this.InputBody.shake();
+      hasError = true;
+    } else if (body.length > 150) {
+      error.body = "Body must have less than 150 characters";
       this.InputBody.shake();
       hasError = true;
     }
-    if (hasError) return;
+
+    this.setState({error});
+    if (hasError) {
+      return;
+    }
     const userId = await AsyncStorage.getItem('user_id');
     const note = {
       title: title,
@@ -67,11 +90,12 @@ class HomeMenu extends Component {
     return (
       <View style={{ flex: 1 }}>
         <ARKit
+          debug
           style={{ flex: 1 }}
           planeDetection={ ARKit.ARPlaneDetection.Horizontal }
           lightEstimationEnabled
-          debug
           onARKitError={(err) => console.log(err)}
+          origin={{position: this.props.anchor.position}}
         >
           {R.map((note) =>
             ( <Note
@@ -104,24 +128,30 @@ class HomeMenu extends Component {
           size={40}
           containerStyle={styles.buttonLeft}
           onPress={async () => {
-              Actions.anchorScanner();
+              const cameraStats = await ARKit.getCamera();
+              this.setState({
+                position: cameraStats.position
+              })
+              //Actions.anchorScanner();
           }}
         />
         <View>
           <Modal isVisible={this.state.modalVisible}>
             <View style={styles.modalView}>
-              <View style={{ flex: 1 , alignSelf: 'center', paddingTop: 20}}>
+              <View style={{ flex: .8 , alignSelf: 'center', paddingTop: 20}}>
                 <Text style={styles.titleText}>Insert Info</Text>
               </View>
-              <View style={{ flex: 2 }}>
+              <View style={{ flex: 2, paddingBottom: 60 }}>
                 <FormLabel>Title</FormLabel>
                 <FormInput
                   ref={ref => this.InputTitle = ref}
                   onChangeText={(text) => this.setState({title: text})}/>
+                <FormValidationMessage>{this.state.error.title}</FormValidationMessage>
                 <FormLabel>Body</FormLabel>
                 <FormInput
                   ref={ref => this.InputBody = ref}
                   onChangeText={(text) => this.setState({body: text})}/>
+                <FormValidationMessage>{this.state.error.body}</FormValidationMessage>
               </View>
               <View style={{ flex: 1 }}>
                 <Button title='Confirmar' onPress={() => this.addNote()}/>

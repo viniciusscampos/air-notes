@@ -5,7 +5,8 @@ const initialState = {
   isFetching: false,
   didInvalidate: false,
   error: null,
-  anchor: null
+  anchor: null,
+  position: {x: 0, y: 0, z: 0}
 };
 
 export default function anchor(state=initialState, action={}) {
@@ -25,7 +26,8 @@ export default function anchor(state=initialState, action={}) {
       error: null,
       isFetching: false,
       didInvalidate: false,
-      anchor: action.data
+      anchor: action.data,
+      position: action.position
     };
   case types.INVALIDATE_ANCHOR:
     return {
