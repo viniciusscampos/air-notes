@@ -10,7 +10,6 @@ function requestAnchor() {
 }
 
 function receiveAnchor(data, position) {
-  alert(data.toString());
   return {
     type: types.RECEIVE_ANCHOR,
     data,
@@ -19,7 +18,6 @@ function receiveAnchor(data, position) {
 }
 
 function invalidateAnchor(err) {
-  alert(err.toString());
   return {
     type: types.INVALIDATE_ANCHOR,
     err
