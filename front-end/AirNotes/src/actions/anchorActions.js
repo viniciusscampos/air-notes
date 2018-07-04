@@ -59,7 +59,7 @@ export function getAnchor(id, position) {
       .then(doc => doc.json())
       .then(doc => {
         console.log(doc);
-        dispatch(receiveAnchor(R.omit('notes', {data: doc}), position));
+        dispatch(receiveAnchor(R.omit('notes', doc), position));
         dispatch(receiveNotes(doc.notes));
       })
       .catch(err => {
