@@ -12,6 +12,7 @@ class Note extends Component {
       defaultProps: {
         color: '',
         position : {},
+        rotation: {},
         title: '',
         body: ''
       }
@@ -71,6 +72,7 @@ class Note extends Component {
     return (
       <ARKit.Plane
         position={propsToUse.position}
+        rotation={propsToUse.rotation}
         shape={{ width: .1, height: .1}}
         material={{
           color: '#f1d161'
