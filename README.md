@@ -1,5 +1,15 @@
 # air-notes
 
+## description
+
+**AiR Notes** is a project for adding virtual notes in real environments using augmented reality. The ideia consists of using anchors (QR codes) in the real world as an origin point for a virtual environment. Each anchor, supposedly always in the same position, creates a persistent reference in the real world that allows a virtual environment to be rendered in a consistent way around it.
+
+You can [watch the demo video](https://www.youtube.com/watch?v=mjiqurlNFDs) and read the remaining of this readme for more informations.
+
+## front-end
+
+A React Native app made for iOS using the [react-native-arkit](https://github.com/react-native-ar/react-native-arkit) binding for ARKit.
+
 ## back-end
 
 ![architecture](https://i.imgur.com/7qro8w0.png)
